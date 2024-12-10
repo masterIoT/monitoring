@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test des Services</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+        }
+        .service {
+            margin: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+        .status {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+        .status-green {
+            background-color: green;
+        }
+        .status-red {
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test des Services</h1>
+    <div id="services"></div>
+
+    <script>
+        const services = {
+            bdd: "http://google.com", // Remplacez avec l'URL réelle
+            grafana: "http://google.com",
+            meteo: "https://portail-api.meteofrance.fr/web/fr/",
+            site: "http://google.com"
+        };
+
+        const container = document.getElementById("services");
+
+        Object.entries(services).forEach(([name, url]) => {
+            const serviceDiv = document.createElement("div");
+            serviceDiv.className = "service";
+            serviceDiv.innerHTML = `
+                <span>${name}</span>
+                <div class="status status-red" id="status-${name}"></div>
+            `;
+            container.appendChild(serviceDiv);
+
+            fetch(`/check_service/${encodeURIComponent(url)}`)
+                .then(response => response.json())
+                .then(data => {
+                    const statusElement = document.getElementById(`status-${name}`);
+                    if (data.status === "UP") {
+                        statusElement.classList.replace("status-red", "status-green");
+                    } else {
+                        statusElement.classList.replace("status-green", "status-red");
+                    }
+                })
+                .catch(() => {
+                    document.getElementById(`status-${name}`).classList.replace("status-green", "status-red");
+                });
+        });
+    </script>
+</body>
+</html>
