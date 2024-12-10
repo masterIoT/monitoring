@@ -1,35 +1,26 @@
-import os
-from flask import Flask, render_template
+from flask import Flask, jsonify, render_template
+from flask_cors import CORS
 import requests
-from threading import Timer
 
 app = Flask(__name__)
+CORS(app)  # Ajoute le support pour CORS
 
-# Charger les URLs des services depuis les variables d'environnement
-SERVICES = {
-    "bdd": os.getenv("SERVICE_BDD", "http://example-bdd-service"),
-    "grafana": os.getenv("SERVICE_GRAFANA", "http://example-grafana"),
-    "meteo": os.getenv("SERVICE_METEO", "https://portail-api.meteofrance.fr/web/fr/"),
-    "site": os.getenv("SERVICE_SITE", "http://example-site"),
-}
-
-# Statut initial des services
-service_status = {key: False for key in SERVICES}
-
-def check_services():
-    global service_status
-    for service, url in SERVICES.items():
-        try:
-            response = requests.head(url, timeout=5)
-            service_status[service] = response.ok
-        except requests.RequestException:
-            service_status[service] = False
-    Timer(30, check_services).start()  # Vérifier toutes les 30 secondes
-
+# Route pour servir la page HTML
 @app.route("/")
 def index():
-    return render_template("index.html", statuses=service_status)
+    return render_template("index.html")
+
+# Route pour tester un service
+@app.route("/check_service/<path:url>")
+def check_service(url):
+    try:
+        response = requests.head(url, timeout=5)
+        if response.status_code == 200:
+            return jsonify({"status": "UP"}), 200
+        else:
+            return jsonify({"status": "DOWN"}), 503
+    except Exception as e:
+        return jsonify({"status": "DOWN", "error": str(e)}), 503
 
 if __name__ == "__main__":
-    check_services()  # Lancer la vérification en arrière-plan
-    app.run(host="0.0.0.0", port=5000)
+    app.run(debug=True)
