@@ -20,8 +20,8 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        username: ${{ github.masterIoT }}
+        password: ${{ secrets.monitoring }}
 
     # Étape 3: Construire l'image Docker
     - name: Build Docker image
