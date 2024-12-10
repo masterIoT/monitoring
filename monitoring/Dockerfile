@@ -2,7 +2,13 @@
 FROM python:3.10-slim
 
 # Installer les dépendances nécessaires
-RUN apt-get update && apt-get install -y curl python-pip && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Mettre à jour pip à la dernière version
+RUN pip install --upgrade pip
 
 # Créer un répertoire de travail
 WORKDIR /app
@@ -10,8 +16,8 @@ WORKDIR /app
 # Copier les fichiers du projet
 COPY . /app
 
-# Installer les dépendances Python
-RUN pip install -r flask
+# Installer les dépendances Python depuis requirements.txt
+RUN pip install -r requirements.txt
 
 # Exposer le port utilisé par le serveur
 EXPOSE 5000
