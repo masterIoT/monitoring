@@ -1,32 +1,33 @@
-name: Build and Push Docker Image
+name: Publish Docker image
 
 on:
   push:
     branches:
-      - monitoring  # Exécutez cette action à chaque push sur la branche `main`
-  workflow_dispatch: # Permet de déclencher le workflow manuellement
+      
+main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    # Étape 1: Cloner le dépôt
-    - name: Checkout code
-      uses: actions/checkout@v3
+      
+name: Check out the repository
+      uses: actions/checkout@v4
 
-    # Étape 2: Se connecter à Docker Hub ou GHCR
-    - name: Log in to GitHub Container Registry
+      
+name: Log in to GitHub Container Registry
       uses: docker/login-action@v2
       with:
         registry: ghcr.io
-        username: ${{ github.masterIoT }}
-        password: ${{ secrets.monitoring }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
-    # Étape 3: Construire l'image Docker
-    - name: Build Docker image
-      run: docker build -t masterIoT/monitoring-app:latest .
-
-    # Étape 4: Pousser l'image vers Docker Hub
-    - name: Push Docker image
-      run: docker push masterIoT/monitoring-app:latest
+      
+name: Build and push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: ./monitoring/
+        file: ./monitoring/Dockerfile
+        tags: ghcr.io/masterIoT/monitoring:latest
+        push: true
