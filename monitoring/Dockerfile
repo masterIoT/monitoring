@@ -11,10 +11,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN pip install --upgrade pip
 
 # Créer un répertoire de travail
-WORKDIR /app/app
+WORKDIR /app
 
 # Copier les fichiers du projet
-COPY . /app
+COPY . /
 
 # Installer les dépendances Python depuis requirements.txt
 RUN pip install flask
