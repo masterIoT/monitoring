@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN pip install --upgrade pip
 
 # Créer un répertoire de travail
-WORKDIR /app
+WORKDIR /app/app
 
 # Copier les fichiers du projet
 COPY . /app
