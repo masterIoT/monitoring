@@ -2,7 +2,7 @@
 FROM python:3.10-slim
 
 # Installer les dépendances nécessaires
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y curl python-pip && rm -rf /var/lib/apt/lists/*
 
 # Créer un répertoire de travail
 WORKDIR /app
