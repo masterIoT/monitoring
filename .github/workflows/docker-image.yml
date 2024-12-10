@@ -25,5 +25,5 @@ jobs:
         with:
           context: ./monitoring
           file: ./monitoring/Dockerfile
-          tags: ghcr.io/masteriot/monitoring:latest
+          tags: ghcr.io/masteriot/monitoring:late
           push: true
