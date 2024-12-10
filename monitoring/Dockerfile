@@ -17,7 +17,7 @@ WORKDIR /app
 COPY . /app
 
 # Installer les dépendances Python depuis requirements.txt
-RUN pip install -r requirements.txt
+RUN pip install flask
 
 # Exposer le port utilisé par le serveur
 EXPOSE 5000
