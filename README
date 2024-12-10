@@ -1,0 +1,9 @@
+TO start please follow : 
+
+docker run -d -p 5000:5000 \
+    -e SERVICE_BDD="http://url-bdd" \
+    -e SERVICE_GRAFANA="http://url-grafana" \
+    -e SERVICE_METEO="https://url-meteo" \
+    -e SERVICE_SITE="http://url-site" \
+    monitoring-app
+
