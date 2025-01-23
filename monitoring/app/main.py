@@ -9,7 +9,6 @@ CORS(app)  # Ajoute le support pour CORS
 @app.route("/")
 def index():
     return render_template("index.html")
-print("zebi")
 # Route pour tester un service
 @app.route("/check_service/<path:url>")
 def check_service(url):
